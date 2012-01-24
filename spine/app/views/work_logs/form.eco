@@ -1,0 +1,12 @@
+<div id="phoneDiv" data-role="fieldcontain">
+  <label for="phone">Phone</label>
+  <input id="phone" name="phone" type="text"/>
+</div>
+<div id="phoneDiv" data-role="fieldcontain">
+  <label for="phone">Phone</label>
+  <input id="phone" name="phone" type="text"/>
+</div>
+<div id="phoneDiv" data-role="fieldcontain">
+  <label for="phone">Phone</label>
+  <input id="phone" name="phone" type="text"/>
+</div>

@@ -1,0 +1,8 @@
+<div data-role="page">
+  <div data-role="header">
+    <h1>Tuntikirjaus</h1>
+  </div>
+  <div data-role="content">
+    <p><%= @description %></p>
+  </div>
+</div>
