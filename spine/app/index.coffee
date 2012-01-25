@@ -1,29 +1,20 @@
 require('lib/setup')
-
-$       = jQuery
-Spine   = require('spine')
+Spine    = require('spine')
+$        = Spine.$
+{Stage}  = require('spine.jquery.mobile')
 WorkLogs = require('controllers/work_logs')
-WorkLog = require('models/work_log')
 
-
-class App extends Spine.Stack
-
-  controllers:
-    workLogs: WorkLogs
-
-  default: 'workLogs'
-
+class jQueryStage extends Stage.Global
   constructor: ->
     super
-    WorkLog.fetch()
-    # Disable click events
-    $('body').bind 'click', (event) ->
-      event.preventDefault()
+    @el.append(@content)
 
-    $('body').bind 'orientationchange', (e) ->
-      orientation = if Math.abs(window.orientation) is 90 then 'landscape' else 'portrait'
-      $('body').removeClass('portrait landscape')
-               .addClass(orientation)
-               .trigger('turn', orientation: orientation)
+class App extends jQueryStage
+  constructor: ->
+    super
+    workLogs = new WorkLogs()
+
+    Spine.Route.setup(shim: true)
+    @navigate '/work_logs'
 
 module.exports = App

@@ -1,0 +1,14 @@
+<div data-role="header">
+  <a data-route="/logs" data-icon="back">Back</a>
+  <h1>Log Entry</h1>
+</div>
+<div data-role="content">
+  <h3 data-bind="log.customer"></h3>
+  <p data-bind="log.description | truncate 140"></p>
+  <span data-bind="log.started_at"></span>
+  <span data-bind="log.ended_at"></span>
+  <span data-bind="log.created_at"></span>
+</div>
+<div data-role="footer">
+
+</div>

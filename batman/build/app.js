@@ -8,21 +8,49 @@
 
     function App() {
       App.__super__.constructor.apply(this, arguments);
-      $('body').bind('click', function(event) {
-        console.log(event);
-        return event.preventDefault();
-      });
     }
+
+    App.on('run', function() {});
+
+    App.on('ready', function() {
+      return console.log("Classifieds ready for use.");
+    });
 
     App.global(true);
 
-    App.controller('worklogs');
+    App.controller('logs');
 
-    App.route('worklogs/:id', 'worklogs#show');
+    App.root('logs#index');
 
-    App.model('work_log');
+    App.resources('logs');
 
-    App.root('worklogs#index');
+    App.model('log');
+
+    App.flash = Batman();
+
+    App.flash.accessor({
+      get: function(k) {
+        return this[k];
+      },
+      set: function(k, v) {
+        var _this = this;
+        this[k] = v;
+        if (v !== '') {
+          setTimeout(function() {
+            return _this.set(k, '');
+          }, 2000);
+        }
+        return v;
+      }
+    });
+
+    App.flashSuccess = function(message) {
+      return this.set('flash.success', message);
+    };
+
+    App.flashError = function(message) {
+      return this.set('flash.error', message);
+    };
 
     return App;
 

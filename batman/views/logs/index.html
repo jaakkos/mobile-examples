@@ -1,0 +1,16 @@
+<div data-role="header">
+  <a data-route="/logs/new" data-icon="new">New</a>
+  <h1>Working Log</h1>
+</div>
+<div data-role="content">
+  <ul id="products">
+    <li data-foreach-log="logs">
+      <span data-route="log" data-bind="log.customer"></span>
+      <p data-bind="log.description | truncate 40 "></p>
+    </li>
+    <li><span data-bind="logs.length"></span> <span data-bind="'log' | pluralize logs.length"></span></li>
+  </ul>
+</div>
+<div data-role="footer">
+
+</div>

@@ -1,12 +1,18 @@
+<form>
 <div id="phoneDiv" data-role="fieldcontain">
-  <label for="phone">Phone</label>
-  <input id="phone" name="phone" type="text"/>
+  <label for="description">Description</label>
+  <input id="description" name="description" type="text"/>
 </div>
 <div id="phoneDiv" data-role="fieldcontain">
-  <label for="phone">Phone</label>
-  <input id="phone" name="phone" type="text"/>
+  <label for="customer">Customer</label>
+  <input id="customer" name="customer" type="text"/>
 </div>
 <div id="phoneDiv" data-role="fieldcontain">
-  <label for="phone">Phone</label>
-  <input id="phone" name="phone" type="text"/>
+  <label for="started_at">Started at</label>
+  <input id="started_at" name="started_at" type="date"/>
 </div>
+<div id="phoneDiv" data-role="fieldcontain">
+  <label for="ended_at">Ended at</label>
+  <input id="ended_at" name="ended_at" type="date"/>
+</div>
+</form>

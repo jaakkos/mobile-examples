@@ -1,75 +1,102 @@
 Spine   = require('spine')
+{Panel} = require('spine.jquery.mobile')
+# $       = Spine.$
 WorkLog = require('models/work_log')
-$       = Spine.$
 
-class List extends Spine.Controller
-  className: 'list'
+class List extends Panel
+  className: 'work-logs list-view'
 
   events:
-    'vclick a.work-log-details': 'show'
+    'tap .item': 'click'
+
+  title: 'Work log'
 
   constructor: ->
     super
-    @active @change
+    WorkLog.bind('refresh change', @render)
+    @addButton('Add', @add).addClass('right')
 
-  change: (params) ->
-    @render()
-
-  render: ->
+  render: =>
     @workLogs = WorkLog.all()
-    console.log @workLogs
     @html require('views/work_logs/index')({ workLogs: @workLogs })
 
-  show:(event) ->
-    event.preventDefault()
-    Spine.trigger 'work_logs:show', event.target.id
+  click: (e) ->
+    item = $(e.target).item()
+    @navigate('/work_logs', item.id, trans: 'right')
 
+  add: ->
+    @navigate('/work_logs/create', trans: 'right')
 
-class Show extends Spine.Controller
-  className: 'show'
+class Show extends Panel
+ constructor: ->
+    super
+
+    WorkLog.bind 'change', @render
+
+    @active @change
+
+    @addButton('Back', @back)
+
+  render: =>
+    return unless @item
+    @html require('views/work_logs/show')(@item)
+
+  change: (params) ->
+    @item = WorkLog.find(params.id)
+    @render()
+
+  back: ->
+    @navigate('/work_logs', trans: 'left')
+
+class Create extends Panel
+  elements:
+    'form': 'form'
 
   events:
-    'tab .edit': 'edit'
+    'submit form': 'submit'
+
+  className: 'work_logs createView'
 
   constructor: ->
     super
-    @active @change
 
-  change: (params) ->
-    @item = WorkLog.find(params)
-    console.log @item
-    @render()
+    @addButton('Cancel', @back)
+    @addButton('Create', @submit).addClass('right')
+    @header.attr('data-role','header')
+
+    @active @render
 
   render: ->
-    console.log "render", @item
-    @html require('views/work_logs/show')(@item)
+    @html require('views/work_logs/form')()
 
+  submit: (e) ->
+    e.preventDefault()
+    workLog = WorkLog.fromForm(@form)
+    if workLog.save()
+      @navigate('/work_logs', workLog.id, trans: 'left')
+
+  back: ->
+    @navigate('/work_logs', trans: 'left')
+
+  deactivate: ->
+    super
+    @form.blur()
 
 class WorkLogs extends Spine.Controller
 
   constructor: ->
     super
+    @list = new List()
+    @show = new Show()
+    @create = new Create()
+
+
+    @routes
+      '/work_logs/create': (params) -> @create.active(params)
+      '/work_logs/:id':    (params) -> @show.active(params)
+      '/work_logs':        (params) -> @list.active(params)
+
     WorkLog.fetch()
-
-    console.log "Element:", @el
-
-    #@el.bind 'touchmove', (e) -> e.preventDefault()
-    @show = new Show(el: @el)
-    @list = new List(el: @el)
-
-    Spine.bind 'work_logs:show', (params)=>
-      @show.active(params)
-
-    Spine.bind 'work_logs:list', (params) =>
-      @list.active(params)
-
-    #@routes
-    #  '/work_logs/:id': ( params ) ->
-    #    @main.show.active(params)
-    #  '/work_logs': ( params ) ->
-    #    @main.list.active(params)
-
-    @list.active({})
 
 
 
